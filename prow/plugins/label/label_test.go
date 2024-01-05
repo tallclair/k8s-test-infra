@@ -129,10 +129,10 @@ func TestHandleComment(t *testing.T) {
 		{
 			name:                  "Add Single Triage Label",
 			body:                  "/triage needs-information",
-			repoLabels:            []string{"area/infra", "triage/needs-information"},
-			issueLabels:           []string{"area/infra"},
+			repoLabels:            []string{"area/infra", "triage/needs-information", "needs-triage"},
+			issueLabels:           []string{"area/infra", "needs-triage"},
 			expectedNewLabels:     formatWithPRInfo("triage/needs-information"),
-			expectedRemovedLabels: []string{},
+			expectedRemovedLabels: formatWithPRInfo("needs-triage"),
 			commenter:             orgMember,
 			action:                github.GenericCommentActionCreated,
 		},

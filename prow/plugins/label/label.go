@@ -210,10 +210,11 @@ func handleComment(gc githubClient, log *logrus.Entry, config plugins.Label, e *
 		}
 		removed := labelsWithCategory(labelsToRemove, needsCategory)
 		if removed.Len() == 0 || labelsWithCategory(labelsToAdd, needsCategory).Len() > 0 {
-			// If a category is not being removed, or also being added, don't add needs-* label.
-			continue
-		}
-		if removed.IsSuperset(labelsWithCategory(issueLabels, needsCategory)) {
+			// If a category is not being removed, or also being added, remove the needs-* label.
+			if github.HasLabel(needsLabel, labels) {
+				labelsToRemove = append(labelsToRemove, needsLabel)
+			}
+		} else if removed.IsSuperset(labelsWithCategory(issueLabels, needsCategory)) {
 			// If all the labels in a needed category are being removed, add the needs-* label.
 			labelsToAdd = append(labelsToAdd, needsLabel)
 		}
